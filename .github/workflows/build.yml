@@ -31,7 +31,24 @@ jobs:
 
       # ubuntu-latest already ships the Android SDK (platform 34 included).
       - name: Build release APK
-        run: gradle assembleRelease --no-daemon --stacktrace
+        shell: bash   # bash with pipefail, so a failed build still fails the step
+        run: gradle assembleRelease --no-daemon --console=plain 2>&1 | tee build.log
+
+      - name: Show errors (only if the build failed)
+        if: failure()
+        run: |
+          echo "=== Compiler / resource errors ==="
+          grep -nE "^e: |^w: .*error|error:|AAPT|R8:|FAILED|What went wrong" -A6 build.log | head -150 || true
+
+      - name: Upload build log and reports (only if the build failed)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-failure-logs
+          path: |
+            build.log
+            app/build/reports/
+          if-no-files-found: ignore
 
       - name: Rename APK
         run: cp app/build/outputs/apk/release/app-release.apk TvAppManager.apk
