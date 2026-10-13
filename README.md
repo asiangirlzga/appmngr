@@ -34,3 +34,8 @@ Or copy the APK to a USB stick and open it with a file manager app.
 
 The release build is signed with the debug key so it installs directly; use your own keystore
 if you plan to distribute it.
+
+## Build with GitHub Actions (no local setup)
+Push this folder to a GitHub repo. `.github/workflows/build.yml` builds the APK on every push
+(Actions tab > latest run > Artifacts > `TvAppManager-apk`). Push a tag like `v1.0` to also
+attach the APK to a GitHub Release.
