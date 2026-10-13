@@ -115,7 +115,7 @@ class SafetyGuard(private val ctx: Context) {
         // HDMI / tuner / live TV inputs provided by system apps
         try {
             val tv = ctx.getSystemService(Context.TV_INPUT_SERVICE) as? TvInputManager
-            tv?.inputList?.forEach {
+            tv?.tvInputList?.forEach {
                 val p = it.serviceInfo.packageName
                 if (isSystemPkg(p)) protect(p, "TV input (HDMI / tuner)")
             }
